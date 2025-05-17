@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SESSION PAIR</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #000814, #001d3d);
+      color: #00ffff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url("https://files.catbox.moe/0iw2wv.jpeg");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.75);
+      border-radius: 20px;
+      padding: 2rem 3rem;
+      box-shadow: 0 0 30px #00ffff88;
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .box {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 2px solid #00ffff88;
+      box-shadow: 0 0 20px #00ffff44;
+    }
+
+    .icon {
+      font-size: 2rem;
+      color: #00ffff;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #00ffff;
+      text-shadow: 0 0 8px #00ffff88;
+    }
+
+    h6 {
+      color: #ccc;
+      margin-bottom: 1.5rem;
+      font-weight: normal;
+      font-size: 0.9rem;
+    }
+
+    .input-container {
+      display: flex;
+      background: #111;
+      border: 1px solid #00ffff;
+      border-radius: 1rem;
+      overflow: hidden;
+      margin-bottom: 1.2rem;
+    }
+
+    .input-container input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 1rem;
+      color: #00ffff;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .input-container button {
+      background: linear-gradient(135deg, #00ffff, #007bff);
+      color: #000;
+      border: none;
+      padding: 0 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .input-container button:hover {
+      background: linear-gradient(135deg, #ff00cc, #3333ff);
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    #pair {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      color: #00ffcc;
+    }
+
+    #waiting-message {
+      color: #ffff00;
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+    }
+
+    .glowing-text {
+      margin-top: 2rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 8px #0ff, 0 0 16px #0ff, 0 0 24px #0ff;
+      animation: pulse 3s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+      }
+      50% {
+        text-shadow: 0 0 20px #f0f, 0 0 30px #f0f;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 1.5rem;
+      }
+      .input-container {
+        flex-direction: column;
+      }
+      .input-container input,
+      .input-container button {
+        width: 100%;
+        border-radius: 0;
+      }
+      .input-container button {
+        border-top: 1px solid #00ffff;
+      }
+    }
+  </style>
+</head>
+<body>
+<audio id="myAudio" loop muted> 
+  <source src="https://files.catbox.moe/nshmju.mp3" type="audio/mp3">
+</audio>
+
+<div class="container">
+  <div class="box">
+    <div class="icon"><i class="fa fa-user"></i></div>
+    <h2>🪆 POPKID 🪆</h2>
+    <h6>Enter your number with country code</h6>
+    <div class="input-container">
+      <input type="number" id="number" placeholder="2413229XXX" />
+      <button id="submit">Enter</button>
+    </div>
+    <a id="waiting-message" style="display:none;">in process...</a>
+    <main id="pair"></main>
+  </div>
+  <div class="glowing-text">🧋 CRAZY TECH 🧋</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
+<script>
+  let a = document.getElementById("pair");
+  let b = document.getElementById("submit");
+  let c = document.getElementById("number");
+
+  async function Copy() {
+    let text = document.getElementById("copy").innerText;
+    let obj = document.getElementById("copy");
+    await navigator.clipboard.writeText(obj.innerText.replace('CODE: ', ''));
+    obj.innerText = "COPIED";
+    obj.style = "color:blue;font-weight:bold";
+    obj.size = "5";
+    setTimeout(() => {
+      obj.innerText = text;
+      obj.style = "color:black;font-weight-bold";
+      obj.size = "5";
+    }, 500);
+  }
+
+  b.addEventListener("click", async (e) => {
+    e.preventDefault();
+    if (!c.value) {
+      a.innerHTML = '<a style="color:red;font-weight:bold">❗Enter your WhatsApp number with country code.</a><br><br>';
+    } else if (c.value.replace(/[^0-9]/g, "").length < 11) {
+      a.innerHTML = '<a style="color:red;font-weight:bold">❌Invalid number format❌</a><br><br>';
+    } else {
+      const bc = c.value.replace(/[^0-9]/g, "");
+      let bb = "", bbc = "";
+      const cc = bc.split('');
+      cc.map(a => {
+        bbc += a;
+        if (bbc.length == 3 || bbc.length == 8) {
+          bb += " " + a;
+        } else {
+          bb += a;
+        }
+      });
+      c.type = "text";
+      c.value = "+" + bb;
+      c.style = "color:#00ffff;font-size:20px";
+      a.innerHTML = '<a style="color:#00ffff;font-weight:bold">Please wait</a><br><br>';
+      try {
+        let { data } = await axios(`/code?number=${bc}`);
+        let code = data.code || "Service Unavailable";
+        a.innerHTML = '<font id="copy" onclick="Copy()" style="color:red;font-weight:bold" size="5">CODE: <span style="color:white;font-weight:bold">' + code + '</span></font><br><br><br>';
+      } catch {
+        a.innerHTML = '<a style="color:red;font-weight:bold">⚠️ Failed to fetch code.</a><br><br>';
+      }
+    }
+  });
+</script>
+
+<script>
+  document.addEventListener('click', function () {
+    const audio = document.getElementById('myAudio');
+    audio.muted = false;
+    audio.play();
+  }, { once: true });
+</script>
+</body>
+</html>
