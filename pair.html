@@ -92,10 +92,15 @@
       background: linear-gradient(135deg, #00ffff, #007bff);
       color: #000;
       border: none;
-      padding: 0 1rem;
+      padding: 0 1.5rem;
       font-weight: bold;
       cursor: pointer;
       transition: all 0.3s ease;
+      font-size: 1rem;
+      min-width: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .input-container button:hover {
@@ -149,6 +154,7 @@
       }
       .input-container button {
         border-top: 1px solid #00ffff;
+        padding: 0.8rem;
       }
     }
   </style>
@@ -161,11 +167,11 @@
 <div class="container">
   <div class="box">
     <div class="icon"><i class="fa fa-user"></i></div>
-    <h2>🪆 SESSION PAIR 🪆</h2>
+    <h2>🪆 DAVIDTECH 🪆</h2>
     <h6>Enter your number with country code</h6>
     <div class="input-container">
       <input type="number" id="number" placeholder="2413229XXX" />
-      <button id="submit">Enter</button>
+      <button id="submit">ENTER</button>
     </div>
     <a id="waiting-message" style="display:none;">in process...</a>
     <main id="pair"></main>
@@ -234,4 +240,4 @@
   }, { once: true });
 </script>
 </body>
-</html>
+  </html>
